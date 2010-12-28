@@ -1,18 +1,17 @@
-File-DirWalk version 0.2
+File-DirWalk version 0.4
 =========================
 
 File::DirWalk is a Perl module to walk through a directory tree
 and run own functions on directories, files and symlinks. 
 
-
 INSTALLATION
 
 To install this module type the following:
 
-   perl Makefile.PL
-   make
-   make test
-   make install
+   perl Build.PL
+   ./Build
+   ./Build test
+   ./Build install
 
 DEPENDENCIES
 
@@ -25,7 +24,6 @@ your system :
 
 COPYRIGHT AND LICENCE
 
-Copyright (c) 2005 Jens Luedicke <jensl@cpan.org>. All rights reserved.
+Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
-
