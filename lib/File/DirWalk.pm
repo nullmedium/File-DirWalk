@@ -1,4 +1,4 @@
-# Copyright (c) 2005-2006 Jens Luedicke <jensl@cpan.org>. All rights reserved.
+# Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
