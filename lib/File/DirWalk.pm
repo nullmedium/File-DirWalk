@@ -16,6 +16,7 @@ our @EXPORT = qw(FAILED SUCCESS ABORTED PRUNE);
 
 use warnings;
 use strict;
+use Carp;
 
 use File::Basename;
 use File::Spec;
@@ -45,29 +46,39 @@ sub new {
 	return $self;
 }
 
+sub setHandler {
+	my ($self,$action,$func) = @_;
+    
+	if (ref($func) ne 'CODE') {
+    	croak("Second argument must be CODE reference.");
+	}
+
+    $self->{$action} = $func;
+}
+
 sub onBeginWalk {
 	my ($self,$func) = @_;
-	$self->{onBeginWalk} = $func;
+	$self->setHandler(onBeginWalk => $func);
 }
 
 sub onLink {
 	my ($self,$func) = @_;
-	$self->{onLink} = $func;
+	$self->setHandler(onLink => $func);
 }
 
 sub onFile {
 	my ($self,$func) = @_;
-	$self->{onFile} = $func;
+	$self->setHandler(onFile => $func);
 }
 
 sub onDirEnter {
 	my ($self,$func) = @_;
-	$self->{onDirEnter} = $func;
+	$self->setHandler(onDirEnter => $func);
 }
 
 sub onDirLeave {
 	my ($self,$func) = @_;
-	$self->{onDirLeave} = $func;
+	$self->setHandler(onDirLeave => $func);
 }
 
 sub setDepth {
