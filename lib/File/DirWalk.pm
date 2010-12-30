@@ -1,6 +1,12 @@
-# Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>. All rights reserved.
-# This program is free software; you can redistribute it and/or
-# modify it under the same terms as Perl itself.
+# Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
+# 
+# This module is free software; you can redistribute it and/or modify 
+# it under the same terms as Perl 5.10.0. For more details, see the
+# full text of the licenses in the directory LICENSES.
+
+# This program is distributed in the hope that it will be
+# useful, but without any warranty; without even the implied
+# warranty of merchantability or fitness for a particular purpose.
 
 package File::DirWalk;
 use base qw(Exporter);
@@ -321,10 +327,6 @@ as return values:
 
 Please mail the author if you encounter any bugs.
 
-=head1 AUTHOR
-
-Jens Luedicke E<lt>jensl@cpan.orgE<gt> web: L<http://perldude.de/>
-
 =head1 CHANGES
 
 Version 0.4: add more methods, better testing, more documentation.
@@ -341,9 +343,18 @@ I wrote DirWalk.pm module for use within my 'Filer' file manager as a directory
 traversing backend and I thought it might be useful for others. It is my first
 CPAN module.
 
+=head1 AUTHOR
+
+Jens Luedicke E<lt>jensl@cpan.orgE<gt>
+
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2005-2006 Jens Luedicke. All rights reserved. This program is free
-software; you can redistribute it and/or modify it under the same terms as Perl
-itself.
+Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
 
+This module is free software; you can redistribute it and/or modify 
+it under the same terms as Perl 5.10.0. For more details, see the
+full text of the licenses in the directory LICENSES.
+
+This program is distributed in the hope that it will be
+useful, but without any warranty; without even the implied
+warranty of merchantability or fitness for a particular purpose.
