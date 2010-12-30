@@ -1,4 +1,5 @@
-use Test::Simple tests => 6;
+use Test::More qw(no_plan);
+use Test::Exception;
 
 use File::Basename;
 use File::DirWalk;
@@ -6,9 +7,11 @@ use File::DirWalk;
 my $perl_path        = dirname($^X);
 my $perl_interpreter = basename($^X);
 
-ok( ref(File::DirWalk->new) eq 'File::DirWalk' ); # 1
+$dw = new File::DirWalk();
 
-$dw = new File::DirWalk;
+ok( ref($dw) eq 'File::DirWalk' );
+
+dies_ok { $dw->setHandler(Foo => 0); }
 
 $dw->onDirEnter(sub {
 	my ($path) = @_;
@@ -20,7 +23,7 @@ $dw->onDirEnter(sub {
 	return SUCCESS;
 });
 
-ok( $dw->walk($perl_path) == FAILED ); # 2
+ok( $dw->walk($perl_path) == FAILED );
 
 $dw->onBeginWalk(sub {
 	my ($path) = @_;
@@ -31,7 +34,7 @@ $dw->onBeginWalk(sub {
 	return SUCCESS;
 });
 
-ok( $dw->walk($perl_path) == ABORTED ); # 3
+ok( $dw->walk($perl_path) == ABORTED );
 
 $dw->onBeginWalk(sub {
 	my ($path) = @_;
@@ -42,7 +45,7 @@ $dw->onBeginWalk(sub {
 	return SUCCESS;
 });
 
-ok( $dw->walk($perl_path) == ABORTED ); # 4
+ok( $dw->walk($perl_path) == ABORTED );
 
 $dw->onFile(sub {
 	my ($path) = @_;
@@ -54,7 +57,7 @@ $dw->onFile(sub {
 	return SUCCESS;
 });
 
-ok( $dw->walk($perl_path) == ABORTED ); # 5
+ok( $dw->walk($perl_path) == ABORTED );
 
 $dw->onFile(sub {
 	my ($path) = @_;
@@ -66,22 +69,4 @@ $dw->onFile(sub {
 	return SUCCESS;
 });
 
-ok( $dw->walk($0) == ABORTED ); # 6
-
-# $dw->setCustomResponse('FOOBAR', -20);
-# ok( $dw->getCustomResponse('FOOBAR') == -20); # 7
-# 
-# $dw->onBeginWalk(sub {
-# 	my ($path) = @_;
-# 
-# 	if ($path eq $ENV{'HOME'}) {
-# 		return $dw->getCustomResponse('FOOBAR');
-# 	}
-# 
-# 	return FAILED;	
-# });
-# 
-# ok( $dw->walk($ENV{'HOME'}) == $dw->getCustomResponse('FOOBAR') ); # 8
-# 
-# $dw->setCustomResponse('WOMBAT', -42);
-# ok( $dw->getCustomResponse('FOOBAR') != $dw->getCustomResponse('WOMBAT') ); # 9
+ok( $dw->walk($0) == ABORTED );
