@@ -1,4 +1,4 @@
-# Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
+# Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
 # 
 # This module is free software; you can redistribute it and/or modify 
 # it under the same terms as Perl 5.10.0. For more details, see the
@@ -262,50 +262,74 @@ Specify a function to be run when leaving a directory.
 
 =item setDepth($int)
 
-Set the directory traversal depth.
-Default: 0
+Set the directory traversal depth. Once the specified directory depth
+has been reached, the C<walk> method returns. The default value is 0.
 
 =item getDepth
 
-Get the directory traversal depth;
+Returns the directory traversal depth.
 
 =item currentDir
 
-The directory we are in:
+Returns the directory part of the current path.
 
     $dw->onBeginWalk(sub {
         my ($path) = @_;
 
-        print "directory: " . $dir,            "\n";
-        print "directory: " . $dw->currentDir, "\n"; # same!
+        print "path: " . $path,            "\n"; # /usr/bin/perl
+        print "directory: " . $dw->currentDir(), "\n"; # /usr/bin
 
         return SUCCESS;
     });
 
 =item currentPath
 
-The current path:
+Returns the current path. The string is identical to the
+$path argument passed to the callback:
 
     $dw->onBeginWalk(sub {
         my ($path) = @_;
 
-        print "directory: " . $path,            "\n";
-        print "directory: " . $dw->currentPath, "\n"; # same!
+        print "path: " . $path,            "\n";        # /usr/bin/perl
+        print "directory: " . $dw->currentPath(), "\n"; # /usr/bin/perl
 
         return SUCCESS;
     });
 
 =item currentBasename
 
+Returns the current base name of the current path:
+
+    $dw->onBeginWalk(sub {
+        my ($path) = @_;
+
+        print "path: " . $path,            "\n";            # /usr/bin/perl
+        print "directory: " . $dw->currentBasename(), "\n"; # perl
+
+        return SUCCESS;
+    });
+
 =item filesInDir
 
-Returns the number of files in directory.
+Returns the number of files wthin the current directory.
 Excludes . and ..
 
 =item walk($path)
 
 Begin the walk through the given directory tree. This method returns if the walk
-is finished or if one of the callbacks doesn't return SUCCESS.
+is finished or if one of the callbacks doesn't return SUCCESS. If the callback function
+returns PRUNE, C<walk> will skip to the next element within the current directory
+hierarchy. You can use PRUNE to exclude files or folders: 
+
+	$dw->onBeginWalk(sub {
+    	my ($path) = @_;
+
+		if ($path =~ /ignore/) {
+			return PRUNE;
+		}
+
+		return SUCCESS;
+	});
 
 =back
 
@@ -315,7 +339,7 @@ All callback-methods expect a function reference as their argument.
 The current path is passed to the callback function.
 
 The callback function must return SUCCESS, otherwise the recursive walk is aborted and
-C<walk> returns. You don't need to define a callback if you don't need to.
+C<walk> returns. Furthermore, C<walk> expects a numeric return value.
 
 =head1 CONSTANTS
 
@@ -360,7 +384,7 @@ Jens Luedicke E<lt>jensl@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
+Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
 
 This module is free software; you can redistribute it and/or modify 
 it under the same terms as Perl 5.10.0. For more details, see the

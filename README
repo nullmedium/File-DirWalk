@@ -1,4 +1,4 @@
-Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
+Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
 
 File-DirWalk version 0.4
 =========================
@@ -26,7 +26,7 @@ your system :
 
 LICENCE INFORMATION
 
-Copyright (c) 2005-2010 Jens Luedicke <jensl@cpan.org>.
+Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
 
 This module is free software; you can redistribute it and/or modify 
 it under the same terms as Perl 5.10.0. For more details, see the
