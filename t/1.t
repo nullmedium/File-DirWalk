@@ -13,6 +13,18 @@ ok( ref($dw) eq 'File::DirWalk' );
 
 dies_ok { $dw->setHandler(Foo => 0); }
 
+$dw->onFile(sub {
+	my ($path) = @_;
+	
+	if (basename($path) eq "1.t") {
+		return ABORTED;
+	}
+
+	return SUCCESS;
+});
+
+ok( $dw->walk($0) == ABORTED );
+
 $dw->onDirEnter(sub {
 	my ($path) = @_;
 
@@ -62,11 +74,11 @@ ok( $dw->walk($perl_path) == ABORTED );
 $dw->onFile(sub {
 	my ($path) = @_;
 	
-	if (basename($path) eq "1.t") {
+	if (basename($path) eq "sh") {
 		return ABORTED;
 	}
 
 	return SUCCESS;
 });
 
-ok( $dw->walk($0) == ABORTED );
+ok( $dw->walk("/bin") == ABORTED );
