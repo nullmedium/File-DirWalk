@@ -1,6 +1,6 @@
 Copyright (c) 2005-2013 Jens Luedicke <jensl@cpan.org>.
 
-File-DirWalk version 0.4
+File-DirWalk version 0.5
 =========================
 
 File::DirWalk is a Perl module to walk through a directory tree
