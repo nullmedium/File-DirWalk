@@ -1,0 +1,26 @@
+---
+abstract: "walk through a directory tree and run callbacks\non files, symlinks and directories."
+author:
+  - 'Jens Luedicke E<lt>jensl@cpan.orgE<gt>'
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3603'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: File-DirWalk
+provides:
+  File::DirWalk:
+    file: lib/File/DirWalk.pm
+    version: 0.4
+recommends:
+  Test::Exception: 0.27
+  Test::More: 0.72
+requires:
+  Carp: 1.08
+  File::Basename: 2.76
+  File::Spec: 3.2501
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.4

@@ -1,5 +1,8 @@
 lib/File/DirWalk.pm
+examples/find-perl-binary.pl
+examples/ls.pl
 MANIFEST
 META.yml
 README
 t/1.t
+Makefile.PL
