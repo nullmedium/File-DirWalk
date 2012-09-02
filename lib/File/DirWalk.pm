@@ -136,7 +136,7 @@ sub walk {
 			}
 		}
 
-		opendir my $dirh, $path || return FAILED;
+		opendir (my $dirh, $path) || return FAILED;
 		my @dir_contents = readdir $dirh;
 		@dir_contents    = File::Spec->no_upwards(@dir_contents);
 
