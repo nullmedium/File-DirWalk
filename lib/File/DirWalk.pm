@@ -362,9 +362,10 @@ as return values:
 
 =back
 
-=head1 BUGS
+=head1 DEVELOPMENT
 
-Please mail the author if you encounter any bugs.
+Please mail the author if you encounter any bugs. The most recent development
+version can be found on GitHub: L<https://github.com/nullmedium/File-DirWalk>
 
 =head1 CHANGES
 
