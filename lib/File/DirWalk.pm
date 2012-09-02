@@ -49,6 +49,10 @@ sub new {
 sub setHandler {
 	my ($self,$action,$func) = @_;
     
+	if ($action !~ /onBeginWalk|onLink|onFile|onDirEnter|onDirLeave/) {
+    	croak("Invalid action argument: $action");
+	}
+	
 	if (ref($func) ne 'CODE') {
     	croak("Second argument must be CODE reference.");
 	}
