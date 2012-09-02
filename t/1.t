@@ -11,7 +11,19 @@ $dw = new File::DirWalk();
 
 ok( ref($dw) eq 'File::DirWalk' );
 
-dies_ok { $dw->setHandler(Foo => 0); }
+ok ($dw->setHandler(onBeginWalk => sub { SUCCESS }));
+ok ($dw->setHandler(onLink      => sub { SUCCESS }));
+ok ($dw->setHandler(onFile      => sub { SUCCESS }));
+ok ($dw->setHandler(onDirEnter  => sub { SUCCESS }));
+ok ($dw->setHandler(onDirLeave  => sub { SUCCESS }));
+
+dies_ok {$dw->setHandler(onBeginWalk => 0)};
+dies_ok {$dw->setHandler(onLink      => 0)};
+dies_ok {$dw->setHandler(onFile      => 0)};
+dies_ok {$dw->setHandler(onDirEnter  => 0)};
+dies_ok {$dw->setHandler(onDirLeave  => 0)};
+
+dies_ok {$dw->setHandler(Foo => sub {})};
 
 $dw->onFile(sub {
 	my ($path) = @_;
