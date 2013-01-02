@@ -369,6 +369,8 @@ version can be found on GitHub: L<https://github.com/nullmedium/File-DirWalk>
 
 =head1 CHANGES
 
+Version 0.5: bugfixes.
+
 Version 0.4: add more methods, better testing, more documentation.
 
 Version 0.3: add PRUNE constant. add option to specify the directory depth.
