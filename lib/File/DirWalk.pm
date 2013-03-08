@@ -1,4 +1,4 @@
-# Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
+# Copyright (c) 2005-2013 Jens Luedicke <jensl@cpan.org>.
 # 
 # This module is free software; you can redistribute it and/or modify 
 # it under the same terms as Perl 5.10.0. For more details, see the
@@ -384,7 +384,7 @@ Jens Luedicke E<lt>jensl@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENCE
 
-Copyright (c) 2005-2012 Jens Luedicke <jensl@cpan.org>.
+Copyright (c) 2005-2013 Jens Luedicke <jensl@cpan.org>.
 
 This module is free software; you can redistribute it and/or modify 
 it under the same terms as Perl 5.10.0. For more details, see the
