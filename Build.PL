@@ -10,8 +10,6 @@ Module::Build->new( module_name => 'File::DirWalk',
                         'Carp'           => '1.08',
                         'File::Spec'     => '3.2501',
                         'File::Basename' => '2.76',
-                    },
-                    recommends => {
                         'Test::More'   => '0.72',
                         'Test::Exception' => '0.27'
                     },

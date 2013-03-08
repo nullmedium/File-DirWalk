@@ -19,10 +19,12 @@ DEPENDENCIES
 
 This module requires these other modules which can be obtained from
 the CPAN <http://cpan.org> if they are not allready installed on
-your system :
+your system:
 
   File::Basename
   File::Spec
+  Test::More
+  Test::Exception
 
 LICENCE INFORMATION
 
