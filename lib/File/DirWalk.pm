@@ -19,12 +19,12 @@ use strict;
 use Carp;
 
 use File::Basename;
-use File::Spec;
+use File::Spec::Functions qw(no_upwards splitdir catfile);
 
 use constant SUCCESS 	=> 1;
 use constant FAILED 	=> 0;
 use constant ABORTED 	=> -1;
-use constant PRUNE 	=> -10;
+use constant PRUNE 	    => -10;
 
 sub new {
 	my ($class) = @_;
@@ -37,11 +37,10 @@ sub new {
 	$self->{onDirLeave}  = sub { SUCCESS };
 
 	$self->{depth}       = 0;
-	$self->{depthCount} = 0;
+	$self->{depthCount}  = 0;
 
-	$self->{count}  = 0;
-
-# 	$self->{customResponse} = {};
+	$self->{entryList}   = [];
+	$self->{count}       = 0;
 
 	return $self;
 }
@@ -124,6 +123,11 @@ sub count {
 	return $self->{count};
 }
 
+sub entryList {
+	my ($self) = @_;
+	return $self->{entryList};
+}
+
 sub walk {
 	my ($self,$path) = @_;
 
@@ -150,22 +154,19 @@ sub walk {
 		}
 
 		opendir (my $dirh, $path) || return FAILED;
-		my @dir_contents = readdir $dirh;
-		@dir_contents    = File::Spec->no_upwards(@dir_contents);
+		$self->{entryList}    = [ no_upwards(readdir $dirh) ];
+		$self->{count}        = scalar @{$self->{entryList}};
 
-		$self->{count} = scalar @dir_contents;
 		++$self->{depthCount};
-
 		if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
 			return $r;
 		}
 
 		# be portable.
-		my @dirs = File::Spec->splitdir($path);
-
-		foreach my $f (@dir_contents) {
+		my @dirs = splitdir($path);
+		foreach my $f (@{$self->{entryList}}) {
 			# be portable.
-			my $path = File::Spec->catfile(@dirs, $f);
+			my $path = catfile(@dirs, $f);
 
 			my $r = $self->walk($path);
 
@@ -331,6 +332,11 @@ Returns the current base name of the current path:
 =item count
 
 Returns the number of elements wthin the current directory.
+Excludes . and ..
+
+=item entryList
+
+Returns an array reference to the elements wthin the current directory.
 Excludes . and ..
 
 =item walk($path)
