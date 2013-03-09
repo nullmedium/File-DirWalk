@@ -11,6 +11,12 @@ $dw = new File::DirWalk();
 
 ok( ref($dw) eq 'File::DirWalk' );
 
+is ($dw->getDepth(), 0);
+dies_ok { $dw->setDepth(-1) };
+is ($dw->getDepth(), 0);
+ok ($dw->setDepth(1));
+is ($dw->getDepth(), 1);
+
 ok ($dw->setHandler(onBeginWalk => sub { SUCCESS }));
 ok ($dw->setHandler(onLink      => sub { SUCCESS }));
 ok ($dw->setHandler(onFile      => sub { SUCCESS }));

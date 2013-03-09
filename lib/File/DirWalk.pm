@@ -87,10 +87,19 @@ sub onDirLeave {
 
 sub setDepth {
 	my ($self,$v) = @_;
+	if ($v < 0) {
+    	croak("Directory depth is negative: $v");
+	}
+
 	$self->{depth} = $v;
 }
 
 sub getDepth {
+	my ($self) = @_;
+	return $self->{depth};
+}
+
+sub currentDepth {
 	my ($self) = @_;
 	return $self->{depthCount};
 }
@@ -268,10 +277,16 @@ Specify a function to be run when leaving a directory.
 
 Set the directory traversal depth. Once the specified directory depth
 has been reached, the C<walk> method returns. The default value is 0.
+Precondition: The value has to be positive. The method will die
+if called with a negative value.
 
 =item getDepth
 
-Returns the directory traversal depth.
+Returns the user-specified directory traversal depth. The default value is 0.
+
+=item currentDepth
+
+Returns the current directory traversal depth.
 
 =item currentDir
 
@@ -369,7 +384,7 @@ version can be found on GitHub: L<https://github.com/nullmedium/File-DirWalk>
 
 =head1 CHANGES
 
-Version 0.5: bugfixes.
+Version 0.5: bugfixes, improved testing, new currentDepth() method.
 
 Version 0.4: add more methods, better testing, more documentation.
 
