@@ -30,13 +30,11 @@ sub new {
     my ($class) = @_;
     my $self = bless {}, $class;
 
-    $self->{onBeginWalk} = sub { SUCCESS };
-    $self->{onLink}      = sub { SUCCESS };
-    $self->{onFile}      = sub { SUCCESS };
-    $self->{onDirEnter}  = sub { SUCCESS };
-    $self->{onDirLeave}  = sub { SUCCESS };
+    foreach my $action (qw/onBeginWalk onLink onFile onDirEnter onDirLeave/) {
+        $self->{$action} = sub { SUCCESS };
+    }
 
-    $self->{depth}       = 0;
+    $self->{depth}         = 0;
     $self->{currentDepth}  = 0;
 
     $self->{entryList}   = [];
