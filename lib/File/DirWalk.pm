@@ -1,6 +1,6 @@
 # Copyright (c) 2005-2013 Jens Luedicke <jensl@cpan.org>.
-# 
-# This module is free software; you can redistribute it and/or modify 
+#
+# This module is free software; you can redistribute it and/or modify
 # it under the same terms as Perl 5.10.0. For more details, see the
 # full text of the licenses in the directory LICENSES.
 
@@ -47,11 +47,11 @@ sub new {
 
 sub setHandler {
 	my ($self,$action,$func) = @_;
-    
+
 	if ($action !~ /onBeginWalk|onLink|onFile|onDirEnter|onDirLeave/) {
     	croak("Invalid action argument: $action");
 	}
-	
+
 	if (ref($func) ne 'CODE') {
     	croak("Second argument must be CODE reference.");
 	}
@@ -352,7 +352,7 @@ Excludes . and ..
 Begin the walk through the given directory tree. This method returns if the walk
 is finished or if one of the callbacks doesn't return SUCCESS. If the callback function
 returns PRUNE, C<walk> will skip to the next element within the current directory
-hierarchy. You can use PRUNE to exclude files or folders: 
+hierarchy. You can use PRUNE to exclude files or folders:
 
 	$dw->onBeginWalk(sub {
     	my ($path) = @_;
@@ -368,7 +368,7 @@ hierarchy. You can use PRUNE to exclude files or folders:
 
 =head1 CALLBACKS
 
-All callback-methods expect a function reference as their argument. 
+All callback-methods expect a function reference as their argument.
 The current path is passed to the callback function.
 
 The callback function must return SUCCESS, otherwise the recursive walk is aborted and
@@ -422,7 +422,7 @@ Jens Luedicke E<lt>jensl@cpan.orgE<gt>
 
 Copyright (c) 2005-2013 Jens Luedicke <jensl@cpan.org>.
 
-This module is free software; you can redistribute it and/or modify 
+This module is free software; you can redistribute it and/or modify
 it under the same terms as Perl 5.10.0. For more details, see the
 full text of the licenses in the directory LICENSES.
 
