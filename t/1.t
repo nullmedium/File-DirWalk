@@ -59,26 +59,15 @@ $dw->onBeginWalk(sub {
 
 ok( $dw->walk($perl_path) == ABORTED );
 
+$dw = new File::DirWalk();
 $dw->onFile(sub {
 	my ($path) = @_;
 
-	if (basename($path) eq $perl_interpreter) {
-		return ABORTED;
+	if ($dw->currentBasename() eq $perl_interpreter) {
+		return 42;
 	}
 
 	return SUCCESS;
 });
 
-ok( $dw->walk($perl_path) == ABORTED );
-
-$dw->onFile(sub {
-	my ($path) = @_;
-	
-	if (basename($path) eq "sh") {
-		return ABORTED;
-	}
-
-	return SUCCESS;
-});
-
-ok( $dw->walk("/bin") == ABORTED );
+ok( $dw->walk($perl_path) == 42 );
