@@ -37,7 +37,7 @@ sub new {
 	$self->{onDirLeave}  = sub { SUCCESS };
 
 	$self->{depth}       = 0;
-	$self->{depthCount}  = 0;
+	$self->{currentDepth}  = 0;
 
 	$self->{entryList}   = [];
 	$self->{count}       = 0;
@@ -100,7 +100,7 @@ sub getDepth {
 
 sub currentDepth {
 	my ($self) = @_;
-	return $self->{depthCount};
+	return $self->{currentDepth};
 }
 
 sub currentDir {
@@ -152,7 +152,7 @@ sub walk {
 	} elsif (-d $path) {
 
 		if ($self->{depth} != 0) {
-			if ($self->{depthCount} == $self->{depth}) {
+			if ($self->{currentDepth} == $self->{depth}) {
 				return SUCCESS;
 			}
 		}
@@ -161,7 +161,7 @@ sub walk {
 		$self->{entryList}    = [ no_upwards(readdir $dirh) ];
 		$self->{count}        = scalar @{$self->{entryList}};
 
-		++$self->{depthCount};
+		++$self->{currentDepth};
 		if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
 			return $r;
 		}
@@ -190,7 +190,7 @@ sub walk {
 		if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
 			return $r;
 		}
-		--$self->{depthCount};
+		--$self->{currentDepth};
 	} else {
 		if ((my $r = $self->{onFile}->($path)) != SUCCESS) {
 			return $r;
