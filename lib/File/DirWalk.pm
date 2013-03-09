@@ -21,183 +21,183 @@ use Carp;
 use File::Basename;
 use File::Spec::Functions qw(no_upwards splitdir catfile);
 
-use constant SUCCESS 	=> 1;
-use constant FAILED 	=> 0;
-use constant ABORTED 	=> -1;
-use constant PRUNE 	    => -10;
+use constant SUCCESS    => 1;
+use constant FAILED     => 0;
+use constant ABORTED    => -1;
+use constant PRUNE      => -10;
 
 sub new {
-	my ($class) = @_;
-	my $self = bless {}, $class;
+    my ($class) = @_;
+    my $self = bless {}, $class;
 
-	$self->{onBeginWalk} = sub { SUCCESS };
-	$self->{onLink}      = sub { SUCCESS };
-	$self->{onFile}      = sub { SUCCESS };
-	$self->{onDirEnter}  = sub { SUCCESS };
-	$self->{onDirLeave}  = sub { SUCCESS };
+    $self->{onBeginWalk} = sub { SUCCESS };
+    $self->{onLink}      = sub { SUCCESS };
+    $self->{onFile}      = sub { SUCCESS };
+    $self->{onDirEnter}  = sub { SUCCESS };
+    $self->{onDirLeave}  = sub { SUCCESS };
 
-	$self->{depth}       = 0;
-	$self->{currentDepth}  = 0;
+    $self->{depth}       = 0;
+    $self->{currentDepth}  = 0;
 
-	$self->{entryList}   = [];
-	$self->{count}       = 0;
+    $self->{entryList}   = [];
+    $self->{count}       = 0;
 
-	return $self;
+    return $self;
 }
 
 sub setHandler {
-	my ($self,$action,$func) = @_;
+    my ($self,$action,$func) = @_;
 
-	if ($action !~ /onBeginWalk|onLink|onFile|onDirEnter|onDirLeave/) {
-    	croak("Invalid action argument: $action");
-	}
+    if ($action !~ /onBeginWalk|onLink|onFile|onDirEnter|onDirLeave/) {
+        croak("Invalid action argument: $action");
+    }
 
-	if (ref($func) ne 'CODE') {
-    	croak("Second argument must be CODE reference.");
-	}
+    if (ref($func) ne 'CODE') {
+        croak("Second argument must be CODE reference.");
+    }
 
     $self->{$action} = $func;
 }
 
 sub onBeginWalk {
-	my ($self,$func) = @_;
-	$self->setHandler(onBeginWalk => $func);
+    my ($self,$func) = @_;
+    $self->setHandler(onBeginWalk => $func);
 }
 
 sub onLink {
-	my ($self,$func) = @_;
-	$self->setHandler(onLink => $func);
+    my ($self,$func) = @_;
+    $self->setHandler(onLink => $func);
 }
 
 sub onFile {
-	my ($self,$func) = @_;
-	$self->setHandler(onFile => $func);
+    my ($self,$func) = @_;
+    $self->setHandler(onFile => $func);
 }
 
 sub onDirEnter {
-	my ($self,$func) = @_;
-	$self->setHandler(onDirEnter => $func);
+    my ($self,$func) = @_;
+    $self->setHandler(onDirEnter => $func);
 }
 
 sub onDirLeave {
-	my ($self,$func) = @_;
-	$self->setHandler(onDirLeave => $func);
+    my ($self,$func) = @_;
+    $self->setHandler(onDirLeave => $func);
 }
 
 sub setDepth {
-	my ($self,$v) = @_;
-	if ($v < 0) {
-    	croak("Directory depth is negative: $v");
-	}
+    my ($self,$v) = @_;
+    if ($v < 0) {
+        croak("Directory depth is negative: $v");
+    }
 
-	$self->{depth} = $v;
+    $self->{depth} = $v;
 }
 
 sub getDepth {
-	my ($self) = @_;
-	return $self->{depth};
+    my ($self) = @_;
+    return $self->{depth};
 }
 
 sub currentDepth {
-	my ($self) = @_;
-	return $self->{currentDepth};
+    my ($self) = @_;
+    return $self->{currentDepth};
 }
 
 sub currentDir {
-	my ($self) = @_;
-	return $self->{currentDir};
+    my ($self) = @_;
+    return $self->{currentDir};
 }
 
 sub currentPath {
-	my ($self) = @_;
-	return $self->{currentPath};
+    my ($self) = @_;
+    return $self->{currentPath};
 }
 
 sub currentBasename {
-	my ($self) = @_;
-	return $self->{currentBasename};
+    my ($self) = @_;
+    return $self->{currentBasename};
 }
 
 sub count {
-	my ($self) = @_;
-	return $self->{count};
+    my ($self) = @_;
+    return $self->{count};
 }
 
 sub entryList {
-	my ($self) = @_;
-	return $self->{entryList};
+    my ($self) = @_;
+    return $self->{entryList};
 }
 
 sub walk {
-	my ($self,$path) = @_;
+    my ($self,$path) = @_;
 
-	my $currentDir      = dirname($path);
-	my $currentBasename = basename($path);
-	my $currentPath     = $path;
+    my $currentDir      = dirname($path);
+    my $currentBasename = basename($path);
+    my $currentPath     = $path;
 
-	$self->{currentDir}      = $currentDir;
-	$self->{currentBasename} = $currentBasename;
-	$self->{currentPath}     = $path;
+    $self->{currentDir}      = $currentDir;
+    $self->{currentBasename} = $currentBasename;
+    $self->{currentPath}     = $path;
 
-	if ((my $r = $self->{onBeginWalk}->($path)) != SUCCESS) {
-		return $r;
-	}
+    if ((my $r = $self->{onBeginWalk}->($path)) != SUCCESS) {
+        return $r;
+    }
 
-	if (-l $path) {
+    if (-l $path) {
 
-		if ((my $r = $self->{onLink}->($path)) != SUCCESS) {
-			return $r;
-		}
+        if ((my $r = $self->{onLink}->($path)) != SUCCESS) {
+            return $r;
+        }
 
-	} elsif (-d $path) {
+    } elsif (-d $path) {
 
-		if ($self->{depth} != 0) {
-			if ($self->{currentDepth} == $self->{depth}) {
-				return SUCCESS;
-			}
-		}
+        if ($self->{depth} != 0) {
+            if ($self->{currentDepth} == $self->{depth}) {
+                return SUCCESS;
+            }
+        }
 
-		opendir (my $dirh, $path) || return FAILED;
-		$self->{entryList}    = [ no_upwards(readdir $dirh) ];
-		$self->{count}        = scalar @{$self->{entryList}};
+        opendir (my $dirh, $path) || return FAILED;
+        $self->{entryList}    = [ no_upwards(readdir $dirh) ];
+        $self->{count}        = scalar @{$self->{entryList}};
 
-		++$self->{currentDepth};
-		if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
-			return $r;
-		}
+        ++$self->{currentDepth};
+        if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
+            return $r;
+        }
 
-		# be portable.
-		my @dirs = splitdir($path);
-		foreach my $f (@{$self->{entryList}}) {
-			# be portable.
-			my $path = catfile(@dirs, $f);
+        # be portable.
+        my @dirs = splitdir($path);
+        foreach my $f (@{$self->{entryList}}) {
+            # be portable.
+            my $path = catfile(@dirs, $f);
 
-			my $r = $self->walk($path);
+            my $r = $self->walk($path);
 
-			if ($r == PRUNE) {
-				next;
-			} elsif ($r != SUCCESS) {
-				return $r;
-			}
-		}
+            if ($r == PRUNE) {
+                next;
+            } elsif ($r != SUCCESS) {
+                return $r;
+            }
+        }
 
-		closedir $dirh;
+        closedir $dirh;
 
-		$self->{currentDir}      = $currentDir;
-		$self->{currentBasename} = $currentBasename;
-		$self->{currentPath}     = $path;
+        $self->{currentDir}      = $currentDir;
+        $self->{currentBasename} = $currentBasename;
+        $self->{currentPath}     = $path;
 
-		if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
-			return $r;
-		}
-		--$self->{currentDepth};
-	} else {
-		if ((my $r = $self->{onFile}->($path)) != SUCCESS) {
-			return $r;
-		}
-	}
+        if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
+            return $r;
+        }
+        --$self->{currentDepth};
+    } else {
+        if ((my $r = $self->{onFile}->($path)) != SUCCESS) {
+            return $r;
+        }
+    }
 
-	return SUCCESS;
+    return SUCCESS;
 }
 
 1;
@@ -354,15 +354,15 @@ is finished or if one of the callbacks doesn't return SUCCESS. If the callback f
 returns PRUNE, C<walk> will skip to the next element within the current directory
 hierarchy. You can use PRUNE to exclude files or folders:
 
-	$dw->onBeginWalk(sub {
-    	my ($path) = @_;
+    $dw->onBeginWalk(sub {
+        my ($path) = @_;
 
-		if ($path =~ /ignore/) {
-			return PRUNE;
-		}
+        if ($path =~ /ignore/) {
+            return PRUNE;
+        }
 
-		return SUCCESS;
-	});
+        return SUCCESS;
+    });
 
 =back
 
