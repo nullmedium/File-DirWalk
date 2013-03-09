@@ -151,10 +151,8 @@ sub walk {
 
     } elsif (-d $path) {
 
-        if ($self->{depth} != 0) {
-            if ($self->{currentDepth} == $self->{depth}) {
-                return SUCCESS;
-            }
+        if (($self->{depth} > 0) and ($self->{currentDepth} == $self->{depth})) {
+            return SUCCESS;
         }
 
         opendir (my $dirh, $path) || return FAILED;
