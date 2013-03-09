@@ -46,7 +46,7 @@ sub new {
 sub setHandler {
     my ($self,$action,$func) = @_;
 
-    if ($action !~ /onBeginWalk|onLink|onFile|onDirEnter|onDirLeave/) {
+    if (not exists $self->{$action}) {
         croak("Invalid action argument: $action");
     }
 
