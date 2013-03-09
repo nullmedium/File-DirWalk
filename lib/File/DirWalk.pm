@@ -39,7 +39,7 @@ sub new {
 	$self->{depth}       = 0;
 	$self->{depthCount} = 0;
 
-	$self->{filesInDir}  = 0;
+	$self->{count}  = 0;
 
 # 	$self->{customResponse} = {};
 
@@ -119,9 +119,9 @@ sub currentBasename {
 	return $self->{currentBasename};
 }
 
-sub filesInDir {
+sub count {
 	my ($self) = @_;
-	return $self->{filesInDir};
+	return $self->{count};
 }
 
 sub walk {
@@ -153,7 +153,7 @@ sub walk {
 		my @dir_contents = readdir $dirh;
 		@dir_contents    = File::Spec->no_upwards(@dir_contents);
 
-		$self->{filesInDir} = scalar @dir_contents;
+		$self->{count} = scalar @dir_contents;
 		++$self->{depthCount};
 
 		if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
@@ -328,9 +328,9 @@ Returns the current base name of the current path:
         return SUCCESS;
     });
 
-=item filesInDir
+=item count
 
-Returns the number of files wthin the current directory.
+Returns the number of elements wthin the current directory.
 Excludes . and ..
 
 =item walk($path)
