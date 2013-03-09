@@ -131,8 +131,12 @@ sub entryList {
 sub walk {
 	my ($self,$path) = @_;
 
-	$self->{currentDir}      = dirname($path);
-	$self->{currentBasename} = basename($path);
+	my $currentDir      = dirname($path);
+	my $currentBasename = basename($path);
+	my $currentPath     = $path;
+
+	$self->{currentDir}      = $currentDir;
+	$self->{currentBasename} = $currentBasename;
 	$self->{currentPath}     = $path;
 
 	if ((my $r = $self->{onBeginWalk}->($path)) != SUCCESS) {
@@ -178,6 +182,10 @@ sub walk {
 		}
 
 		closedir $dirh;
+
+		$self->{currentDir}      = $currentDir;
+		$self->{currentBasename} = $currentBasename;
+		$self->{currentPath}     = $path;
 
 		if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
 			return $r;
