@@ -37,7 +37,7 @@ sub new {
 	$self->{onDirLeave}  = sub { SUCCESS };
 
 	$self->{depth}       = 0;
-	$self->{depth_count} = 0;
+	$self->{depthCount} = 0;
 
 	$self->{filesInDir}  = 0;
 
@@ -88,7 +88,7 @@ sub setDepth {
 
 sub getDepth {
 	my ($self) = @_;
-	return $self->{depth_count};
+	return $self->{depthCount};
 }
 
 sub currentDir {
@@ -131,7 +131,7 @@ sub walk {
 	} elsif (-d $path) {
 
 		if ($self->{depth} != 0) {
-			if ($self->{depth_count} == $self->{depth}) {
+			if ($self->{depthCount} == $self->{depth}) {
 				return SUCCESS;
 			}
 		}
@@ -141,11 +141,11 @@ sub walk {
 		@dir_contents    = File::Spec->no_upwards(@dir_contents);
 
 		$self->{filesInDir} = scalar @dir_contents;
+		++$self->{depthCount};
 
 		if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
 			return $r;
 		}
-		++$self->{depth_count};
 
 		# be portable.
 		my @dirs = File::Spec->splitdir($path);
@@ -168,7 +168,7 @@ sub walk {
 		if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
 			return $r;
 		}
-		--$self->{depth_count};
+		--$self->{depthCount};
 	} else {
 		if ((my $r = $self->{onFile}->($path)) != SUCCESS) {
 			return $r;
