@@ -13,91 +13,91 @@ ok( -e "t/tree" );
 ok( -d "t/tree" );
 
 foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
-	ok( -e "t/tree/$subdir" );
-	ok( -d "t/tree/$subdir" );
+    ok( -e "t/tree/$subdir" );
+    ok( -d "t/tree/$subdir" );
 
-	$dw = new File::DirWalk();
-	$dw->onBeginWalk(sub {
-		my ($path,$dir,$basename) = @_;
-		ok(-e $path);
-		is($dw->currentDir(), $dir);
-		is($dw->currentBasename(), $basename);
+    $dw = new File::DirWalk();
+    $dw->onBeginWalk(sub {
+        my ($path,$dir,$basename) = @_;
+        ok(-e $path);
+        is($dw->currentDir(), $dir);
+        is($dw->currentBasename(), $basename);
 
-		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
-			return 42;
-		}
+        if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
+            return 42;
+        }
 
-		return SUCCESS;
-	});
-	is( $dw->walk("t/tree"), 42 );
+        return SUCCESS;
+    });
+    is( $dw->walk("t/tree"), 42 );
 
-	$dw = new File::DirWalk();
-	$dw->onDirEnter(sub {
-		my ($path,$dir,$basename) = @_;
-		ok(-e $path);
-		ok(-d $path);
-		ok(-d $dir);
-		is($dw->currentDir(), $dir);
-		is($dw->currentBasename(), $basename);
+    $dw = new File::DirWalk();
+    $dw->onDirEnter(sub {
+        my ($path,$dir,$basename) = @_;
+        ok(-e $path);
+        ok(-d $path);
+        ok(-d $dir);
+        is($dw->currentDir(), $dir);
+        is($dw->currentBasename(), $basename);
 
-		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
-			is( $dw->count(), 10 );
-			is( $dw->currentDepth(), 2 );
-			return 42;
-		}
+        if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
+            is( $dw->count(), 10 );
+            is( $dw->currentDepth(), 2 );
+            return 42;
+        }
 
-		return SUCCESS;
-	});
-	is( $dw->walk("t/tree"), 42 );
+        return SUCCESS;
+    });
+    is( $dw->walk("t/tree"), 42 );
 
-	$dw = new File::DirWalk();
-	$dw->onDirLeave(sub {
-		my ($path,$dir,$basename) = @_;
-		ok(-e $path);
-		ok(-d $path);
-		ok(-d $dir);
-		is($dw->currentDir(), $dir);
-		is($dw->currentBasename(), $basename);
+    $dw = new File::DirWalk();
+    $dw->onDirLeave(sub {
+        my ($path,$dir,$basename) = @_;
+        ok(-e $path);
+        ok(-d $path);
+        ok(-d $dir);
+        is($dw->currentDir(), $dir);
+        is($dw->currentBasename(), $basename);
 
-		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
-			is( $dw->count(), 10 );
-			is( $dw->currentDepth(), 2 );
-			return 42;
-		}
+        if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
+            is( $dw->count(), 10 );
+            is( $dw->currentDepth(), 2 );
+            return 42;
+        }
 
-		return SUCCESS;
-	});
+        return SUCCESS;
+    });
 
-	is( $dw->walk("t/tree"), 42 );
+    is( $dw->walk("t/tree"), 42 );
 
-	$dw = new File::DirWalk();
-	$dw->onFile(sub {
-		my ($path,$dir,$basename) = @_;
-		ok(-e $path);
-		ok(-f $path);
-		ok(-d $dir);
-		is($dir, "t/tree/$subdir");
-		is($dw->currentDir(), "t/tree/$subdir");
-		is($dw->currentDir(), $dir);
-		is($dw->currentBasename(), $basename);
-		return SUCCESS;
-	});
+    $dw = new File::DirWalk();
+    $dw->onFile(sub {
+        my ($path,$dir,$basename) = @_;
+        ok(-e $path);
+        ok(-f $path);
+        ok(-d $dir);
+        is($dir, "t/tree/$subdir");
+        is($dw->currentDir(), "t/tree/$subdir");
+        is($dw->currentDir(), $dir);
+        is($dw->currentBasename(), $basename);
+        return SUCCESS;
+    });
 
-	is( $dw->walk("t/tree/$subdir"), SUCCESS );
-	is( $dw->count(), 10 );
+    is( $dw->walk("t/tree/$subdir"), SUCCESS );
+    is( $dw->count(), 10 );
 }
 
 $files = 0;
 $dw = new File::DirWalk();
 $dw->onFile(sub {
-	my ($path,$dir,$basename) = @_;
-	ok(-e $path);
-	ok(-f $path);
-	ok(-d $dir);
-	is($dw->currentDir(), $dir);
-	is($dw->currentBasename(), $basename);
-	++$files;
-	return SUCCESS;
+    my ($path,$dir,$basename) = @_;
+    ok(-e $path);
+    ok(-f $path);
+    ok(-d $dir);
+    is($dw->currentDir(), $dir);
+    is($dw->currentBasename(), $basename);
+    ++$files;
+    return SUCCESS;
 });
 
 is( $dw->walk("t/tree"), SUCCESS );

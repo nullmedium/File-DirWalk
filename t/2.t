@@ -10,25 +10,25 @@ ok(-e "t/");
 ok(-d "t/");
 
 foreach my $f qw(1.t 2.t 3.t 4.t) {
-	$dw = new File::DirWalk();
-	$dw->setDepth(1);
+    $dw = new File::DirWalk();
+    $dw->setDepth(1);
 
-	$dw->onFile(sub {
-		my ($path,$dir,$basename) = @_;
-		ok(-e $path);
-		ok(-f $path);
-		ok(-d $dir);
-		is($dir, "t");
-		is($dw->currentDir(), "t");
-		is($dw->currentDir(), $dir);
-		is($dw->currentBasename(), $basename);
+    $dw->onFile(sub {
+        my ($path,$dir,$basename) = @_;
+        ok(-e $path);
+        ok(-f $path);
+        ok(-d $dir);
+        is($dir, "t");
+        is($dw->currentDir(), "t");
+        is($dw->currentDir(), $dir);
+        is($dw->currentBasename(), $basename);
 
-		if (($dw->currentBasename() eq $f) and ($basename eq $f)) {
-			return 42;
-		}
+        if (($dw->currentBasename() eq $f) and ($basename eq $f)) {
+            return 42;
+        }
 
-		return SUCCESS;
-	});
+        return SUCCESS;
+    });
 
-	is($dw->walk("t/"), 42);
+    is($dw->walk("t/"), 42);
 }
