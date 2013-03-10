@@ -1,4 +1,4 @@
-use Test::More tests => 29;
+use Test::More tests => 33;
 use Test::Exception;
 
 BEGIN { use_ok( 'File::DirWalk' ); }
@@ -6,6 +6,11 @@ require_ok( 'File::DirWalk' );
 
 $dw = new File::DirWalk();
 is(ref($dw), 'File::DirWalk' );
+
+is(SUCCESS, 1);
+is(FAILED,  0);
+is(ABORTED, -1);
+is(PRUNE,  -10);
 
 is ($dw->getDepth(), 0);
 dies_ok { $dw->setDepth(-1) };
