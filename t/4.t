@@ -20,6 +20,7 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
     $dw->onBeginWalk(sub {
         my ($path,$dir,$basename) = @_;
         ok(-e $path);
+        ok(-d $dir);
         is($dw->currentDir(), $dir);
         is($dw->currentBasename(), $basename);
 
@@ -41,8 +42,16 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
         is($dw->currentBasename(), $basename);
 
         if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
-            is( $dw->count(), 10 );
             is( $dw->currentDepth(), 2 );
+            is( @{$dw->entryList()}, 10);
+            is( $dw->count(), 10 );
+
+            foreach my $expected (qw(file0 file1 file2 file3 file4 file5 file6 file7 file8 file9)) {
+                my @foo = grep(/$expected/, @{$dw->entryList()});
+                is(@foo, 1);
+                is($foo[0], $expected);
+            }
+            
             return 42;
         }
 
@@ -60,8 +69,16 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
         is($dw->currentBasename(), $basename);
 
         if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
-            is( $dw->count(), 10 );
             is( $dw->currentDepth(), 2 );
+            is( @{$dw->entryList()}, 10);
+            is( $dw->count(), 10 );
+
+            foreach my $expected (qw(file0 file1 file2 file3 file4 file5 file6 file7 file8 file9)) {
+                my @foo = grep(/$expected/, @{$dw->entryList()});
+                is(@foo, 1);
+                is($foo[0], $expected);
+            }
+            
             return 42;
         }
 
