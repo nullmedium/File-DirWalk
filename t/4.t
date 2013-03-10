@@ -18,10 +18,12 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
 
 	$dw = new File::DirWalk();
 	$dw->onBeginWalk(sub {
-		my ($path) = @_;
+		my ($path,$dir,$basename) = @_;
 		ok(-e $path);
+		is($dw->currentDir(), $dir);
+		is($dw->currentBasename(), $basename);
 
-		if ($dw->currentBasename() eq $subdir) {
+		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
 			return 42;
 		}
 
@@ -31,11 +33,14 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
 
 	$dw = new File::DirWalk();
 	$dw->onDirEnter(sub {
-		my ($path) = @_;
+		my ($path,$dir,$basename) = @_;
 		ok(-e $path);
 		ok(-d $path);
+		ok(-d $dir);
+		is($dw->currentDir(), $dir);
+		is($dw->currentBasename(), $basename);
 
-		if ($dw->currentBasename() eq $subdir) {
+		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
 			is( $dw->count(), 10 );
 			is( $dw->currentDepth(), 2 );
 			return 42;
@@ -47,11 +52,14 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
 
 	$dw = new File::DirWalk();
 	$dw->onDirLeave(sub {
-		my ($path) = @_;
+		my ($path,$dir,$basename) = @_;
 		ok(-e $path);
 		ok(-d $path);
+		ok(-d $dir);
+		is($dw->currentDir(), $dir);
+		is($dw->currentBasename(), $basename);
 
-		if ($dw->currentBasename() eq $subdir) {
+		if (($dw->currentBasename() eq $subdir) and ($basename eq $subdir)) {
 			is( $dw->count(), 10 );
 			is( $dw->currentDepth(), 2 );
 			return 42;
@@ -64,9 +72,14 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
 
 	$dw = new File::DirWalk();
 	$dw->onFile(sub {
-		my ($path) = @_;
+		my ($path,$dir,$basename) = @_;
 		ok(-e $path);
 		ok(-f $path);
+		ok(-d $dir);
+		is($dir, "t/tree/$subdir");
+		is($dw->currentDir(), "t/tree/$subdir");
+		is($dw->currentDir(), $dir);
+		is($dw->currentBasename(), $basename);
 		return SUCCESS;
 	});
 
@@ -77,9 +90,12 @@ foreach my $subdir (qw(dir1 dir2 dir3 dir4 dir5)) {
 $files = 0;
 $dw = new File::DirWalk();
 $dw->onFile(sub {
-	my ($path) = @_;
+	my ($path,$dir,$basename) = @_;
 	ok(-e $path);
 	ok(-f $path);
+	ok(-d $dir);
+	is($dw->currentDir(), $dir);
+	is($dw->currentBasename(), $basename);
 	++$files;
 	return SUCCESS;
 });

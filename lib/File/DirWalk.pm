@@ -128,7 +128,6 @@ sub entryList {
 
 sub walk {
     my ($self,$path) = @_;
-
     my $currentDir      = dirname($path);
     my $currentBasename = basename($path);
     my $currentPath     = $path;
@@ -137,13 +136,13 @@ sub walk {
     $self->{currentBasename} = $currentBasename;
     $self->{currentPath}     = $path;
 
-    if ((my $r = $self->{onBeginWalk}->($path)) != SUCCESS) {
+    if ((my $r = $self->{onBeginWalk}->($path,$currentDir,$currentBasename)) != SUCCESS) {
         return $r;
     }
 
     if (-l $path) {
 
-        if ((my $r = $self->{onLink}->($path)) != SUCCESS) {
+        if ((my $r = $self->{onLink}->($path,$currentDir,$currentBasename)) != SUCCESS) {
             return $r;
         }
 
@@ -158,7 +157,7 @@ sub walk {
         $self->{count}        = scalar @{$self->{entryList}};
 
         ++$self->{currentDepth};
-        if ((my $r = $self->{onDirEnter}->($path)) != SUCCESS) {
+        if ((my $r = $self->{onDirEnter}->($path,$currentDir,$currentBasename)) != SUCCESS) {
             return $r;
         }
 
@@ -183,12 +182,12 @@ sub walk {
         $self->{currentBasename} = $currentBasename;
         $self->{currentPath}     = $path;
 
-        if ((my $r = $self->{onDirLeave}->($path)) != SUCCESS) {
+        if ((my $r = $self->{onDirLeave}->($path,$currentDir,$currentBasename)) != SUCCESS) {
             return $r;
         }
         --$self->{currentDepth};
     } else {
-        if ((my $r = $self->{onFile}->($path)) != SUCCESS) {
+        if ((my $r = $self->{onFile}->($path,$currentDir,$currentBasename)) != SUCCESS) {
             return $r;
         }
     }

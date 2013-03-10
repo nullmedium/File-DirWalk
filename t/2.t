@@ -14,11 +14,16 @@ foreach my $f qw(1.t 2.t 3.t 4.t) {
 	$dw->setDepth(1);
 
 	$dw->onFile(sub {
-		my ($path) = @_;
+		my ($path,$dir,$basename) = @_;
 		ok(-e $path);
 		ok(-f $path);
+		ok(-d $dir);
+		is($dir, "t");
+		is($dw->currentDir(), "t");
+		is($dw->currentDir(), $dir);
+		is($dw->currentBasename(), $basename);
 
-		if ($dw->currentBasename() eq $f) {
+		if (($dw->currentBasename() eq $f) and ($basename eq $f)) {
 			return 42;
 		}
 
