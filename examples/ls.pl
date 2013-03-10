@@ -31,9 +31,10 @@ $dw->onDirLeave(sub {
 	return SUCCESS;
 });
 
-if (-e $ARGV[0]) {
-	$dw->walk($ARGV[0]);
-} else {
- 	my $cwd = getcwd();
- 	$dw->walk($cwd);
+my $path = cwd();
+
+if ((defined $ARGV[0]) and (-e $ARGV[0])) {
+    $path = $ARGV[0];
 }
+
+$dw->walk($path);
