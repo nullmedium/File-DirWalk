@@ -13,6 +13,5 @@ Module::Build->new( module_name => 'File::DirWalk',
                         'Test::More'   => '0.72',
                         'Test::Exception' => '0.27'
                     },
-                    sign        => 1,
-                    create_makefile_pl => 'traditional',
+                    sign        => 1
                   )->create_build_script;

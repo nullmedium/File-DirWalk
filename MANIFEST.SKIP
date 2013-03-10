@@ -1,1 +1,6 @@
 ^MYMETA.yml$
+.git
+.DS_Store
+Build
+_build
+blib
